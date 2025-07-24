@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WrenDragon Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+            transition: color 0.3s;
+        }
+        input[type="text"],
+        input[type="number"] {
+            width: 60%; /* Medium size */
+            padding: 8px; /* Medium size */
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: center;
+            appearance: none;
+            -moz-appearance: textfield;
+            background-color: #fff;
+            color: #333;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #6772e5;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #5469d4;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+            transition: color 0.3s;
+        }
+        .qr-codes {
+            margin-top: 20px;
+            display: none;
+        }
+        .qr-codes img {
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+        .qr-code-item {
+            display: inline-block;
+            margin: 10px;
+        }
+        .separator {
+            border-top: 1px solid #ccc;
+            margin: 20px 0;
+            transition: border-color 0.3s;
+        }
+        .current-date {
+            font-size: 0.9em;
+            color: #777;
+            margin-top: 10px;
+            transition: color 0.3s;
+        }
+        .mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #6772e5;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .mode-toggle:hover {
+            background-color: #5469d4;
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        body.dark-mode .container {
+            background-color: #1e1e1e;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        body.dark-mode h1 {
+            color: #ffffff;
+        }
+        body.dark-mode input[type="text"],
+        body.dark-mode input[type="number"] {
+            background-color: #333;
+            border-color: #444;
+            color: #ffffff;
+        }
+        body.dark-mode .result {
+            color: #ffffff;
+        }
+        body.dark-mode .qr-codes img {
+            border-color: #444;
+        }
+        body.dark-mode .separator {
+            border-color: #444;
+        }
+        body.dark-mode .current-date {
+            color: #bbb;
+        }
+
+        /* Welcome and Calculation Sections */
+        #welcomeSection {
+            display: block;
+        }
+        #calculationSection {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mode Toggle Button -->
+    <button class="mode-toggle" onclick="toggleMode()">Dark Mode</button>
+
+    <!-- Welcome Section -->
+    <div class="container" id="welcomeSection">
+        <h1>Welcome to WrenDragon</h1>
+        <div class="separator"></div>
+
+        <!-- Customer Name Input -->
+        <label for="customerName">Enter Your Name:</label><br>
+        <input type="text" id="customerName" placeholder="Your Name"><br>
+
+        <!-- Enter Button -->
+        <button onclick="enterCalculation()">Enter</button>
+    </div>
+
+    <!-- Calculation Section -->
+    <div class="container" id="calculationSection">
+        <h1>Welcome, <span id="displayCustomerName"></span>!</h1>
+        <div class="separator"></div>
+
+        <!-- Driver Information -->
+        <p><strong>Driver:</strong> WrenDragon</p>
+        <p><strong>Customer:</strong> <span id="customerNameDisplay"></span></p>
+        <p><strong>Facebook:</strong> Bunkheang</p>
+        <p><strong>Phone number:</strong> 0964355014</p>
+
+        <!-- Display Current Date -->
+        <p class="current-date">Today's Date: <span id="currentDate"></span></p>
+
+        <div class="separator"></div>
+
+        <!-- Distance Input Field -->
+        <label for="distance">Enter the distance in kilometers:</label><br>
+        <input type="number" id="distance" placeholder="Distance"><br>
+
+        <!-- Payment Button -->
+        <button onclick="handlePayment()">Payment</button>
+
+        <!-- Result Section -->
+        <div class="result" id="result"></div>
+
+        <!-- QR Codes -->
+        <div class="qr-codes" id="qrCodes">
+            <div class="separator"></div>
+            <p><strong>Scan QR Code to Pay:</strong></p>
+            
+            <!-- ABA Dollar -->
+            <div class="qr-code-item">
+                <p>ABA Dollar</p>
+                <img src="image/Dollar.png" alt="ABA Dollar QR Code">
+            </div>
+
+            <!-- ABA Riel -->
+            <div class="qr-code-item">
+                <p>ABA Riel</p>
+                <img src="image/riel.png" alt="ABA Riel QR Code">
+            </div>
+
+            <div class="separator"></div>
+        </div>
+    </div>
+
+    <script>
+        // Function to display the current date
+        function displayCurrentDate() {
+            const currentDate = new Date();
+            const formattedDate = currentDate.toLocaleDateString(); // Format the date
+            document.getElementById('currentDate').textContent = formattedDate;
+        }
+
+        // Function to switch to the calculation section
+        function enterCalculation() {
+            const customerName = document.getElementById('customerName').value;
+
+            if (!customerName) {
+                alert('Please enter your name');
+                return;
+            }
+
+            // Display the customer name in the calculation section
+            document.getElementById('displayCustomerName').textContent = customerName;
+            document.getElementById('customerNameDisplay').textContent = customerName;
+
+            // Hide the welcome section and show the calculation section
+            document.getElementById('welcomeSection').style.display = 'none';
+            document.getElementById('calculationSection').style.display = 'block';
+        }
+
+        // Function to handle payment
+        function handlePayment() {
+            const distance = parseFloat(document.getElementById('distance').value);
+
+            if (isNaN(distance)) {
+                alert('Please enter a valid number for distance');
+                return;
+            }
+
+            // Calculate the result
+            const result = 4000 + 1500 * (distance - 1);
+            const dollars = result / 4100;
+
+            // Display the result
+            document.getElementById('result').innerHTML = `
+                <strong>Calculation Result:</strong><br>
+                Distance: ${distance.toFixed(2)} km<br>
+                Riel: ${result.toFixed(2)} Riel<br>
+                Dollar: ${dollars.toFixed(4)} USD
+            `;
+
+            // Show the QR codes
+            const qrCodes = document.getElementById('qrCodes');
+            qrCodes.style.display = 'block';
+        }
+
+        // Function to toggle dark mode
+        function toggleMode() {
+            const body = document.body;
+            const modeToggle = document.querySelector('.mode-toggle');
+
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                modeToggle.textContent = 'Normal Mode';
+            } else {
+                modeToggle.textContent = 'Dark Mode';
+            }
+        }
+
+        // Display the current date when the page loads
+        displayCurrentDate();
+    </script>
+</body>
+</html>
